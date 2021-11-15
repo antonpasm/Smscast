@@ -1,0 +1,7 @@
+ErrorDocument 403 /err_page.html
+ErrorDocument 404 /err_page.html
+ErrorDocument 500 /err_page.html
+<Files "db_cfg.php">  
+  Order Allow,Deny
+  Deny from all
+</Files>

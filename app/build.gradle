@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.pasm.smscast"
+        minSdk 21
+        targetSdk 29
+        versionCode 1
+        versionName '1.1.0'
+        resConfigs "nodpi"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${rootProject.name}_${versionName}.apk"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.android.volley:volley:1.2.1'
+}
