@@ -19,13 +19,24 @@ public class PinSearcher {
     }
 
     /**
+     * Правила для определения pin
+     * <p>
+     * непрерывная последовательность от 4 до 6 цифр
+     * <p>
+     * перед pin могут быть только символы ` -:;,!?`
+     * перед pin не должно быть последовательности `* ` (**** 12345 - не pin)
+     * <p>
+     * после pin могут быть только символы ` .,:;`
+     * после pin не должно быть `.цифра` или `,цифра` (1234.5678 - не pin)
+     * после pin не должно быть ` руб.` или ` р.` (1234 руб. - не pin)
+     *
      * @param message Обрабатываемая строка
      */
     public PinSearcher(String message) {
         this.message = message;
 
         pins = new ArrayList<>();
-        Matcher m = Pattern.compile("(?<![^\\s\\-:;,!?]|\\*\\s)(\\d{4,6})(?![^\\s.,:;]|[.,]\\d)").matcher(message);
+        Matcher m = Pattern.compile("(?<![^\\s\\-:;,!?]|\\*\\s)(\\d{4,6})(?![^\\s.,:;]|[.,]\\d|\\s*руб\\.|\\s*р\\.)").matcher(message);
         while (m.find()) {
             idx.add(m.start());
             idx.add(m.end());
