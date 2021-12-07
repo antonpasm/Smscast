@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
         tv.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Грузим сохранённые настройки
-        MySettings.restore(getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE));
+        MySettings.init(getApplicationContext());
 
         edBotToken.setText(MySettings.BotToken);
         edChatID.setText(MySettings.ChatID);

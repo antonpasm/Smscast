@@ -26,6 +26,8 @@ public class PhoneMonitor extends BroadcastReceiver {
         String action = intent.getAction();
         Log.i("" + context.getPackageName(), "PhoneMonitor.onReceive:" + action);
 
+        MySettings.init(context.getApplicationContext());
+
         if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
 
             if (phoneStateListener == null) {

@@ -31,6 +31,9 @@ public class NotifyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startID) {
+
+        MySettings.init(getApplicationContext());
+
         if (intent != null) {
             Long time = intent.getLongExtra("time", 0);
             String from = intent.getStringExtra("from");

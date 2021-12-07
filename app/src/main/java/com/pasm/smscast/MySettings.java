@@ -1,5 +1,7 @@
 package com.pasm.smscast;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 
@@ -20,6 +22,13 @@ class MySettings {
     public static boolean SendToTelegram = true;
     public static boolean SendToServer = false;
     public static String SenderPrefix = "";
+
+    public static void init(Context context) {
+        if (pref == null) {
+            pref = context.getSharedPreferences(context.getPackageName(), Activity.MODE_PRIVATE);
+            restore();
+        }
+    }
 
     private static String safeGetString(String key, String defValue) {
         String res;
@@ -42,9 +51,7 @@ class MySettings {
         }
     }
 
-    public static void restore(SharedPreferences preferences) {
-        pref = preferences;
-
+    public static void restore() {
         BotToken     = safeGetString("BotToken", BotToken);
         ChatID       = safeGetString("ChatID", ChatID);
         HostPassword = safeGetString("HostPassword", HostPassword);
