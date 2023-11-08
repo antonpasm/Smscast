@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">Smscast</string>
-    <string name="accessibility_service_desc">Smscast stub accessibility service</string>
-    <string name="show_notification">Показывать уведомление</string>
+    <string name="sms_monitor">Следить за SMS</string>
+    <string name="call_monitor">Следить за пропущенными вызовами</string>
+    <string name="notification_monitor">Следить за уведомлениями</string>
+    <string name="notificationIgnoreOngoing">игнорировать ONGOING_EVENT</string>
+    <string name="notificationInfoLevel">уровень служебной информации</string>
+    <string name="notificationIgnoreList">Игнорировать следующие приложения</string>
+    <string name="notificationIgnoreList_hint">[Одна строка - одно приложение]</string>
     <string name="copy_pin">Скопировать PIN</string>
-    <string name="missed_call">Уведомлять о пропущенных звонках</string>
+    <string name="show_notification">Показывать уведомление</string>
     <string name="show_toast">Показывать Toast</string>
     <string name="send_to_telegram">Отправить в Telegram</string>
+    <string name="telegram_help">1. Зарегайте у &lt;a href=\"https://t.me/BotFather\"&gt;@BotFather&lt;/a&gt; нового бота.&lt;br&gt;2. В поле BotToken введите, полученный &lt;b&gt;token&lt;/b&gt;.&lt;br&gt;3. Начните чат с ботом.&lt;br&gt;4. Тапните &lt;a href=\"\"&gt;тут, чтобы получить&lt;/a&gt; &lt;b&gt;ChatID&lt;/b&gt;&lt;br&gt;5. Нажмите копку\u0020</string>
+    <string name="telegram_error_need_token">Нужно ввести token</string>
+    <string name="telegram_error_no_id">Не смог получить ChatID. Напишите боту что нибудь</string>
     <string name="bottoken_hint">BotToken</string>
     <string name="chatid_hint">ChatID</string>
     <string name="send_to_server">Отправить на сервер</string>
@@ -18,11 +26,17 @@
     <string name="whitelist_hint">[Одна строка - один номер]\n[Если пусто - все номера]</string>
     <string name="sender_prefix">Префикс отправителя</string>
     <string name="prefix_hint">Префикс</string>
-    <string name="call_missed">☎ Пропущенный вызов</string>
     <string name="apply">Сохранить настройки</string>
     <string name="test">Проверить уведомление</string>
+
     <string name="saved">Сохранено</string>
+    <string name="copied">&lt;u&gt;%s&lt;/u&gt; скопировано</string>
+    <string name="logcat_copied">Logcat copied</string>
+    <string name="call_missed">☎ Пропущенный вызов</string>
     <string name="unknownNumber">&lt;неизвестно&gt;</string>
+    <string name="accessibility_service_desc">Smscast stub accessibility service</string>
+    <string name="notify_notification_on">* Доступ к уведомлениям включен (Notification access)</string>
+    <string name="notify_notification_off">* Отключен доступ к уведомлениям (Notification access)</string>
     <string name="notify_accessibility_on">* Accessibility включен</string>
     <string name="notify_accessibility_off">* Accessibility отключен. На MIUI возможно не будет срабатывать копирование PIN</string>
     <string name="notify_permission_RECEIVE_SMS">Отсутствует разрешение к SMS. Вы не сможете отлеживать входящие SMS</string>
@@ -31,10 +45,5 @@
     <string name="notify_permission_READ_CONTACTS">Отсутствует разрешение на просмотр контактов. В отправителе будет виден только номер телефона, без имени контакта</string>
     <string name="notify_permission_PHONE_STATE">Отсутствует разрешение о состоянии телефона. Вы не сможете отлеживать пропущенные звонки</string>
     <string name="notify_permission_CALL_LOG">Отсутствует разрешение к Журналу звонков. Вы не будете видеть номер телефона при отслеживании звонков</string>
-    <string name="telegram_help">1. Зарегайте у &lt;a href=\"https://t.me/BotFather\"&gt;@BotFather&lt;/a&gt; нового бота.&lt;br&gt;2. В поле BotToken введите, полученный &lt;b&gt;token&lt;/b&gt;.&lt;br&gt;3. Начните чат с ботом.&lt;br&gt;4. Тапните &lt;a href=\"\"&gt;тут, чтобы получить&lt;/a&gt; &lt;b&gt;ChatID&lt;/b&gt;&lt;br&gt;5. Нажмите копку\u0020</string>
-    <string name="telegram_error_need_token">Нужно ввести token</string>
-    <string name="telegram_error_no_id">Не смог получить ChatID. Напишите боту что нибудь</string>
-    <string name="copied">&lt;u&gt;%s&lt;/u&gt; скопировано</string>
-    <string name="logcat_copied">Logcat copied</string>
     <string name="notify_channel_name">Smscast уведомления</string>
 </resources>

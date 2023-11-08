@@ -28,7 +28,7 @@ public class CopyBroadcastReceiver extends BroadcastReceiver {
                 ClipData clip = ClipData.newPlainText("pin", text);
                 clipboard.setPrimaryClip(clip);
 
-                // Закрыть шторку уведомления. т.к. автоматом не закрывается при нажатии на Action Button
+                // Закрыть шторку уведомления т.к. автоматом не закрывается при нажатии на Action Button
                 context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
 
                 Toast.makeText(context, Html.fromHtml(String.format(context.getString(R.string.copied), text)), Toast.LENGTH_SHORT).show();

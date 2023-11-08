@@ -21,12 +21,17 @@ import java.util.Map;
 
 class MyHttp {
 
-    @SuppressWarnings("CanBeFinal")
-    public static RetryPolicy myRetryPolicy = new DefaultRetryPolicy(3000, 2, 3);
+//    Был Volley : Unhandled exception java.lang.IllegalArgumentException: timeout < 0
+//    @SuppressWarnings("CanBeFinal")
+//    public static RetryPolicy myRetryPolicy = new DefaultRetryPolicy(3000, 2, 3);
+//    Попробую создавать myRetryPolicy для каждого запроса..
+    static RetryPolicy getRetryPolicy() {
+        return new DefaultRetryPolicy(3000, 2, 3);
+    }
 
     public static void logError(VolleyError error, String description, String url, Context context) {
 
-        String tag = "" + context.getPackageName();
+        String tag = String.valueOf(context.getPackageName());
         NetworkResponse response = error.networkResponse;
         description = description == null ? "" : description + " ";
         Log.e(tag, description + error);
@@ -57,11 +62,11 @@ class MyHttp {
                     return headers;
                 }
             };
-            request.setRetryPolicy(myRetryPolicy);
+            request.setRetryPolicy(getRetryPolicy());
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(request);
         } catch (Exception e) {
-            Log.e("" + context.getPackageName(), "exception in HttpGET. " + e.getMessage());
+            Log.e(String.valueOf(context.getPackageName()), "exception in HttpGET. " + e.getMessage());
         }
     }
 
@@ -90,11 +95,11 @@ class MyHttp {
                     return params;
                 }
             };
-            request.setRetryPolicy(myRetryPolicy);
+            request.setRetryPolicy(getRetryPolicy());
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(request);
         } catch (Exception e) {
-            Log.e("" + context.getPackageName(), "exception in HttpPOST. " + e.getMessage());
+            Log.e(String.valueOf(context.getPackageName()), "exception in HttpPOST. " + e.getMessage());
         }
     }
 

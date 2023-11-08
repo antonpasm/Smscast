@@ -34,7 +34,7 @@ public class MyCipher {
             }
             return Base64.encodeToString(encodedBytes, Base64.NO_WRAP | Base64.URL_SAFE);
         } catch (Exception e) {
-            Log.e("" + context.getPackageName(), "exception in Encode. " + e.getMessage());
+            Log.e(String.valueOf(context.getPackageName()), "exception in Encode. " + e.getMessage());
         }
         return "";
     }

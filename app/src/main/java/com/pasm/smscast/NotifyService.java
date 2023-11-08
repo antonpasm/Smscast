@@ -40,7 +40,7 @@ public class NotifyService extends Service {
             if (from == null) {
                 from = getString(R.string.unknownNumber);
             } else {
-                // Например при запросе баланса МТС приходит сообщение от номера "Balance\r"
+                // Например, при запросе баланса МТС приходит сообщение от номера "Balance\r"
                 from = from.trim();
             }
             String body = intent.getStringExtra("body");
@@ -66,12 +66,12 @@ public class NotifyService extends Service {
                 RegexpFilter filter = new RegexpFilter(MySettings.RegexpFilterList);
                 body = filter.filter(from, contact, body);
                 if (filter.lastError != null) {
-                    // Хоть както уведомить юзера о ошибках в фильтрах
+                    // Хоть как-то уведомить юзера об ошибках в фильтрах
                     if (MySettings.SendToTelegram)
                         sendToTelegram(
                                 time,
                                 "<Regexp Filter error>",
-                                String.format("<pre>%s</pre>", TelegramUtils.escapeHtml(filter.lastError))
+                                String.format("<code>%s</code>", TelegramUtils.escapeHtml(filter.lastError))
                         );
                     if (MySettings.SendToServer)
                         sendToServer(
@@ -121,7 +121,8 @@ public class NotifyService extends Service {
                             pinSearcher.decorate(new PinSearcher.Decorator() {
                                 @Override
                                 public String pin(String pin) {
-                                    return String.format("<b>%s</b>", pin);
+                                    // 'code' tag allow copy text
+                                    return String.format("<code>%s</code>", pin);
                                 }
 
                                 @Override
@@ -144,7 +145,7 @@ public class NotifyService extends Service {
      * Попытаемся достать имя контакта из контактов телефона
      *
      * @param from номер телефона
-     * @return имя контакта. null если не нашли номер в контактах
+     * @return имя контакта или null, если не нашли номер в контактах
      */
     private String contactName(String from) {
         if ("".equals(from)) {
@@ -164,7 +165,7 @@ public class NotifyService extends Service {
                 cursor.close();
             }
         } catch (SecurityException e) {
-            Log.e("" + getPackageName(), "exception in contactName. " + e.getMessage());
+            Log.e(String.valueOf(getPackageName()), "exception in contactName. " + e.getMessage());
         }
         return contact;
     }
@@ -179,10 +180,10 @@ public class NotifyService extends Service {
      * Отправить сообщение в Telegram
      * @param time Временная метка
      * @param from Текст "от кого"
-     * @param body Текст сообщения. Допустимы теги форматироания telegram. Остальной текст должен быть экранирован ф-ией TelegramUtils.escapeHtml(String)
+     * @param body Текст сообщения. Допустимы теги форматирования telegram. Остальной текст должен быть экранирован ф-ией TelegramUtils.escapeHtml(String)
      */
     private void sendToTelegram(Long time, String from, String body) {
-        String message = String.format("<pre>%s</pre>\n<b>%s</b>\n%s", formatDateTime(time), TelegramUtils.escapeHtml(from), body);
+        String message = String.format("<code>%s</code>\n<b>%s</b>\n%s", formatDateTime(time), TelegramUtils.escapeHtml(from), body);
         TelegramUtils.sendToTelegramHtml(
                 this,
                 MySettings.BotToken,
@@ -252,7 +253,7 @@ public class NotifyService extends Service {
                 .setStyle(new Notification.BigTextStyle().bigText(message))    // Возможность развернуть Notify и увидеть весь текст
                 .setAutoCancel(false);
 
-        // Добавить Action на копирование найденных pin. Не более 3х
+        // Добавить Action на копирование найденных pin. Не более 3-х
         for (int i = 0; i < 3 && i < pins.size(); i++) {
             Intent intent = new Intent(this, CopyBroadcastReceiver.class);
             intent.putExtra("extra", pins.get(i));

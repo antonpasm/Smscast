@@ -24,7 +24,7 @@ public class PhoneMonitor extends BroadcastReceiver {
             return;
 
         String action = intent.getAction();
-        Log.i("" + context.getPackageName(), "PhoneMonitor.onReceive:" + action);
+        Log.i(String.valueOf(context.getPackageName()), "PhoneMonitor.onReceive:" + action);
 
         MySettings.init(context.getApplicationContext());
 
@@ -38,7 +38,7 @@ public class PhoneMonitor extends BroadcastReceiver {
                     @Override
                     public void onCallStateChanged(int state, String incomingNumber) {
 
-                        if (MySettings.MissedCall) {
+                        if (MySettings.CallMonitor) {
 
                             // Вроде не нужно, но на всякий случай
                             if (incomingNumber == null) {
@@ -56,7 +56,11 @@ public class PhoneMonitor extends BroadcastReceiver {
                                     mIntent.putExtra("time", System.currentTimeMillis());
                                     mIntent.putExtra("from", "".equals(lastIncomingNumber) ? context.getString(R.string.unknownNumber) : lastIncomingNumber);
                                     mIntent.putExtra("body", String.format(Locale.US, "%s (%d:%02d)", context.getString(R.string.call_missed), minutes, seconds));
-                                    context.startService(mIntent);
+                                    try {
+                                        context.startService(mIntent);
+                                    } catch (Exception e) {
+                                        Log.e(String.valueOf(context.getPackageName()), "exception in PhoneMonitor. " + e.getMessage());
+                                    }
                                 }
                                 lastIncomingNumber = null;
 
@@ -66,7 +70,7 @@ public class PhoneMonitor extends BroadcastReceiver {
                                 lastIncomingTimeMillis = System.currentTimeMillis();
 
                             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                                // Сняли трубку. Значит игнорим этот звонок
+                                // Сняли трубку. Значит игнорируем этот звонок
                                 lastIncomingNumber = null;
                             }
                         } else {

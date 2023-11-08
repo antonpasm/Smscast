@@ -11,6 +11,15 @@ import android.util.Log;
 
 public class SMSMonitor extends BroadcastReceiver {
 
+
+//    public SMSMonitor() {
+//        Log.i("pasm", "SMSMonitor.constructor " + this);
+//    }
+//
+//    protected void finalize ( ) {
+//        Log.i("pasm", "SMSMonitor.finalize " + this);
+//    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         // Вызывается на событии "android.provider.Telephony.SMS_RECEIVED" для получения SMS
@@ -23,41 +32,60 @@ public class SMSMonitor extends BroadcastReceiver {
             return;
 
         String action = intent.getAction();
-        Log.i("" + context.getPackageName(), "SMSMonitor.onReceive:" + action);
+        Log.i(String.valueOf(context.getPackageName()), "SMSMonitor.onReceive:" + action);
+
+        MySettings.init(context.getApplicationContext());
+
         Intent mIntent = new Intent(context, NotifyService.class);
         mIntent.putExtra("time", System.currentTimeMillis());
 
         if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action)) {
             // Пришла SMS
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                Object[] smsextras = (Object[]) extras.get("pdus");
-                String sms_from = null;
-                StringBuilder sb = new StringBuilder();
+            if (MySettings.SMSMonitor) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    Object[] sms_extras = (Object[]) extras.get("pdus");
+                    String sms_from = null;
+                    StringBuilder sb = new StringBuilder();
 
-                for (Object smsextra : smsextras) {
-                    SmsMessage msg = SmsMessage.createFromPdu((byte[]) smsextra);
-                    if (sms_from == null)
-                        sms_from = msg.getOriginatingAddress();
+                    if (sms_extras != null) {
+                        for (Object sms_extra : sms_extras) {
+                            SmsMessage msg = SmsMessage.createFromPdu((byte[]) sms_extra);
+                            if (sms_from == null)
+                                sms_from = msg.getOriginatingAddress();
 
-                    sb.append(msg.getMessageBody());
+                            sb.append(msg.getMessageBody());
+                        }
+                    }
+
+                    mIntent.putExtra("from", sms_from);
+                    mIntent.putExtra("body", sb.toString());
+                    try {
+                        context.startService(mIntent);
+                    } catch (Exception e) {
+                        Log.e(String.valueOf(context.getPackageName()), "exception in SMSMonitor. " + e.getMessage());
+                    }
                 }
-
-                mIntent.putExtra("from", sms_from);
-                mIntent.putExtra("body", sb.toString());
-                context.startService(mIntent);
             }
         } else {
             // На все остальные подписанные уведомления просто информируем текстом типа уведомления
             mIntent.putExtra("from", "internal");
 
-            String extra = intent.getStringExtra("extra");
-            if (extra == null) {
-                extra = "";
+            String body;
+            if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(action)) {
+                body = String.format("Обновлено до версии %s", BuildConfig.VERSION_NAME);
+            } else {
+                String extra;
+                extra = intent.getStringExtra("extra");
+                body = extra == null ? action : String.format("%s %s", action, extra);
             }
-            mIntent.putExtra("body", action + extra);
+            mIntent.putExtra("body", body);
 
-            context.startService(mIntent);
+            try {
+                context.startService(mIntent);
+            } catch (Exception e) {
+                Log.e(String.valueOf(context.getPackageName()), "exception in SMSMonitor.other. " + e.getMessage());
+            }
         }
     }
 }

@@ -25,10 +25,11 @@ public class PinSearcher {
      * <p>
      * перед pin могут быть только символы ` -:;,!?`
      * перед pin не должно быть последовательности `* ` (**** 12345 - не pin)
+     * перед pin не должно быть последовательности `цифра-` (0-12345 - не pin)
      * <p>
      * после pin могут быть только символы ` .,:;`
      * после pin не должно быть `.цифра` или `,цифра` (1234.5678 - не pin)
-     * после pin не должно быть ` руб.` или ` р.` (1234 руб. - не pin)
+     * после pin не должно быть ` руб.` или ` р.` или ` ₽` (1234 руб. - не pin)
      *
      * @param message Обрабатываемая строка
      */
@@ -36,13 +37,14 @@ public class PinSearcher {
         this.message = message;
 
         pins = new ArrayList<>();
-        Matcher m = Pattern.compile("(?<![^\\s\\-:;,!?]|\\*\\s)(\\d{4,6})(?![^\\s.,:;]|[.,]\\d|\\s*руб\\.|\\s*р\\.)").matcher(message);
+        Matcher m = Pattern.compile("(?<![^\\s\\-:;,!?]|\\*\\s|\\d-)(\\d{4,6})(?![^\\s.,:;]|[.,]\\d|\\s*руб\\.|\\s*р\\.|\\s*₽)").matcher(message);
         while (m.find()) {
             idx.add(m.start());
             idx.add(m.end());
 
             String pin = m.group();
-            pins.add(pin);
+            if (!pins.contains(pin))
+                pins.add(pin);
         }
     }
 

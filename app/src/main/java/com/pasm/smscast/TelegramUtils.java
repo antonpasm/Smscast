@@ -24,8 +24,8 @@ class TelegramUtils {
 
 
     /**
-     * Экранировать текст для Telegram
-     * escapeHtml не подходит, т.к. например заменяет множество пробеловл на <tt>&amp;nbsp;</tt> и переводы строки, что для телеграма нормально
+     * Экранировать текст для Telegram.
+     * escapeHtml не подходит, т.к., например, заменяет множество пробелов на <tt>&amp;nbsp;</tt> и переводы строки, что для телеграма нормально
      * @param text что экранируем
      * @return заэкранировали
      */
@@ -42,7 +42,7 @@ class TelegramUtils {
      * Отправить сообщение в Telegram
      * @param BotToken Токен бота
      * @param ChatID ID чата
-     * @param message Текст сообщения. Допустимы теги форматироания telegram. Остальной текст должен быть экранирован ф-ией {@link #escapeHtml(String)}
+     * @param message Текст сообщения. Допустимы теги форматирования telegram. Остальной текст должен быть экранирован ф-ией {@link #escapeHtml(String)}
      */
     public static void sendToTelegramHtml(Context context, String BotToken, String ChatID, String message) {
 
@@ -54,6 +54,8 @@ class TelegramUtils {
         Map<String, String> params = new HashMap<>();
         params.put("chat_id", ChatID);
         params.put("parse_mode", "html");
+        // Отключить предпросмотр ссылок
+        params.put("disable_web_page_preview", "true");
         params.put("text", message);
         MyHttp.httpPOST(
                 context,
@@ -111,7 +113,7 @@ class TelegramUtils {
                         }
 
                     } else {
-                        Message = "" + error;
+                        Message = String.valueOf(error);
                     }
                     cb.error(Message);
                 }
